@@ -600,10 +600,10 @@ function updateTimePlayed() {
         timePlayed[1] -= 24;
         timePlayed[0]++;
     }
-    document.getElementById.innerText("daysPlayed") = timePlayed[0];
-    document.getElementById.innerText("hoursPlayed") = timePlayed[1];
-    document.getElementById.innerText("minutesPlayed") = timePlayed[2];
-    document.getElementById.innerText("secondsPlayed") = timePlayed[3];
+    document.getElementById("daysPlayed").innerText = timePlayed[0];
+    document.getElementById("hoursPlayed").innerText = timePlayed[1];
+    document.getElementById("minutesPlayed").innerText = timePlayed[2];
+    document.getElementById("secondsPlayed ").innerText = timePlayed[3];
     saveGame();
 }
 
