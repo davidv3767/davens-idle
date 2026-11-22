@@ -16,6 +16,7 @@ let brokenBouncfinity = false;
 let davenBalls = [];
 let davenBallCost = 100;
 let achievements = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, 0];
+let timePlayed = [0, 0, 0, 0]
 const numberOfAchievements = 28;
 const maxDavenBalls = 10;
 const sizeMap = {
@@ -106,6 +107,7 @@ function loadGame() {
             achievements.push(false);
         }
     }
+    if (localStorage.getItem('timePlayed') !== null) timePlayed = JSON.parse(localStorage.getItem('timePlayed'));
 }
 
 function saveGame() {
@@ -128,6 +130,7 @@ function saveGame() {
     localStorage.setItem('davenBallCost', JSON.stringify(davenBallCost));
     localStorage.setItem('maxDavenBalls', maxDavenBalls);
     localStorage.setItem('achievements', JSON.stringify(achievements));
+    localStorage.setItem('timePlayed', JSON.stringify(timePlayed));
 }
 
 function updateUI() {
@@ -580,7 +583,24 @@ function resetProgress() {
     brokenBouncfinity = false;
     davenBalls = [];
     davenBallCost = 100;
-    achievements = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, 0];
+    achievements = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, 0];
+}
+
+function updateTimePlayed() {
+    timePlayed[3]++;
+    if (timePlayed[3] >= 60) {
+        timePlayed[3] -= 60;
+        timePlayed[2]++;
+    }
+    if (timePlayed[2] >= 60) {
+        timePlayed[2] -= 60;
+        timePlayed[1]++;
+    }
+    if (timePlayed[1] >= 24) {
+        timePlayed[1] -= 24;
+        timePlayed[0]++;
+    }
+    saveGame();
 }
 
 loadGame();
@@ -590,3 +610,4 @@ renderDavenBalls();
 addBounces();
 setInterval(addBounces, 1000 * βPchallenge1 / βPbounceSpeed);
 setInterval(passiveβP, 1000);
+setInterval(updateTimePlayed, 1000);
