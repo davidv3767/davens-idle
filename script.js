@@ -603,7 +603,7 @@ function updateTimePlayed() {
     document.getElementById("daysPlayed").innerText = timePlayed[0];
     document.getElementById("hoursPlayed").innerText = timePlayed[1];
     document.getElementById("minutesPlayed").innerText = timePlayed[2];
-    document.getElementById("secondsPlayed ").innerText = timePlayed[3];
+    document.getElementById("secondsPlayed").innerText = timePlayed[3];
     saveGame();
 }
 
