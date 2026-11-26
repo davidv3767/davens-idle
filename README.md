@@ -21,7 +21,7 @@ Welcome the Daven bouncy balls! Inspired by the Haven mascot, there are 7 Daven 
 At the stats tab, you can check your achievements/secrets (37 achievements, 8 secrets) and the player index based off of them (from 0.0 to 5.1). You can also reset all your progress at any time by pressing "Reset Progress"! Please note there will be no warning; one press will reset everything.
 
 ## In The Future
-We have thoughts about continuing this project on Coral (coral.hackclub.com) where we add more content & maybe try to build an AI to speedrun our game!
+We have thoughts about continuing this project on Phantom (phantom.hackclub.com) where we add more content & maybe try to build an AI to speedrun our game!
 
 ## Disclaimer
 Due to the limited amount of time spent on this project, there may be bugs we have not provided a solution to. If we plan to work on this in the future, all  known to us will be fixed! 
