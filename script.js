@@ -15,9 +15,11 @@ let maxBalls = 10;
 let brokenBouncfinity = false;
 let davenBalls = [];
 let davenBallCost = 100;
-let achievements = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, 0];
+let achievements = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, 0];
+let secrets = [false, false, false, false, false, false, false, false, 0]
 let timePlayed = [0, 0, 0, 0]
-const numberOfAchievements = 28;
+const numberOfAchievements = 37;
+const numberOfSecrets = 8;
 const maxDavenBalls = 10;
 const sizeMap = {
     "XS": "25px",
@@ -38,11 +40,14 @@ const davenImageMap = {
     "royal": "royaldaven.png",
     "emperor": "royaldaven.png"
 };
+const secret1 = ["red", "orange", "yellow", "green", "blue", "purple", "white", "black"];
 const container = document.getElementById("ball-display");
 
 function addBounces() {
     let allBlack = true;
     let all3XLs = true;
+    let ballNum = 0;
+    let secret1 = true;
     for (let ball of balls) {
         bounces += Math.floor(ball[2] * βPbounceGain);
         if (ball[0] !== "black") {
@@ -50,6 +55,11 @@ function addBounces() {
         }
         if (ball[1] !== "3XL") {
             all3XLs = false;
+        }
+        if (ball[0] == secret1[ballNum] || ballNum >= 8) {
+            ballNum++;
+        } else {
+            secret1 = false; 
         }
     }
     if (balls.length >= 10 && !achievements[1]) {
@@ -63,6 +73,10 @@ function addBounces() {
     if (all3XLs && allBlack && balls.length >= 10 && !achievements[9]) {
         achievements[9] = true;
         achievements[numberOfAchievements]++;
+    }
+    if (secret1) {
+        secrets[0] = true;
+        secrets[numberOfSecrets]++;
     }
     if (βPchallenge3) {
         bounces = bounces * 0.995;
@@ -107,6 +121,12 @@ function loadGame() {
             achievements.push(false);
         }
     }
+    if (localStorage.getItem('secrets') !== null) {
+        secrets = JSON.parse(localStorage.getItem('secrets'));
+        while (secrets.length <= numberOfAchievements) {
+            secrets.push(false);
+        }
+    }
     if (localStorage.getItem('timePlayed') !== null) timePlayed = JSON.parse(localStorage.getItem('timePlayed'));
 }
 
@@ -131,6 +151,7 @@ function saveGame() {
     localStorage.setItem('maxDavenBalls', maxDavenBalls);
     localStorage.setItem('achievements', JSON.stringify(achievements));
     localStorage.setItem('timePlayed', JSON.stringify(timePlayed));
+    localStorage.setItem('secrets', JSON.stringify(secrets));
 }
 
 function updateUI() {
@@ -290,15 +311,15 @@ function checkForBouncfinity() {
         βP += βPperβ;
         if (βPchallenges[0] == "IP") {
             βPchallenges[0] = "F";
-            achievements[17] = true;
+            achievements[20] = true;
             achievements[numberOfAchievements]++;
         } else if (βPchallenges[1] == "IP") {
             βPchallenges[1] = "F";
-            achievements[18] = true;
+            achievements[21] = true;
             achievements[numberOfAchievements]++;
         } else if (βPchallenges[2] == "IP") {
             βPchallenges[2] = "F";
-            achievements[19] = true;
+            achievements[22] = true;
             achievements[numberOfAchievements]++;
         }
         if (!achievements[10]) {
@@ -319,43 +340,46 @@ function checkForBouncfinity() {
         βP += (βPperβ * (2**x));
         if (βPchallenges[0] == "IP") {
             βPchallenges[0] = "F";
-            achievements[17] = true;
+            achievements[20] = true;
             achievements[numberOfAchievements]++;
         } else if (βPchallenges[1] == "IP") {
             βPchallenges[1] = "F";
-            achievements[18] = true;
+            achievements[21] = true;
             achievements[numberOfAchievements]++;
         } else if (βPchallenges[2] == "IP") {
             βPchallenges[2] = "F";
-            achievements[19] = true;
+            achievements[22] = true;
             achievements[numberOfAchievements]++;
         }
         if (!achievements[10]) {
             achievements[10] = true;
         }
+        if (!achievements[23]) {
+            achievements[23] = true;
+        }
     }
     if (βP >= 10 && !achievements[11]) {
-        achievements[11] = true;
-        achievements[numberOfAchievements]++;
-    }
-    if (βP >= 100 && !achievements[13]) {
-        achievements[13] = true;
-        achievements[numberOfAchievements]++;
-    }
-    if (βP >= 1000 && !achievements[15]) {
-        achievements[15] = true;
-        achievements[numberOfAchievements]++;
-    }
-    if (numberOfBouncfinities >= 10 && !achievements[12]) {
-        achievements[12] = true;
-        achievements[numberOfAchievements]++;
-    }
-    if (numberOfBouncfinities >= 100 && !achievements[14]) {
         achievements[14] = true;
         achievements[numberOfAchievements]++;
     }
-    if (numberOfBouncfinities >= 1000 && !achievements[16]) {
+    if (βP >= 100 && !achievements[13]) {
         achievements[16] = true;
+        achievements[numberOfAchievements]++;
+    }
+    if (βP >= 1000 && !achievements[15]) {
+        achievements[18] = true;
+        achievements[numberOfAchievements]++;
+    }
+    if (numberOfBouncfinities >= 10 && !achievements[12]) {
+        achievements[15] = true;
+        achievements[numberOfAchievements]++;
+    }
+    if (numberOfBouncfinities >= 100 && !achievements[14]) {
+        achievements[17] = true;
+        achievements[numberOfAchievements]++;
+    }
+    if (numberOfBouncfinities >= 1000 && !achievements[16]) {
+        achievements[19] = true;
         achievements[numberOfAchievements]++;
     }
     updateUI();
@@ -367,14 +391,26 @@ function βPupgrade(upgradeNum) {
         βP -= βPupgradecost[0];
         βPbounceGain += 0.1;
         βPupgradecost[0] = (βPupgradecost[0] * 3) - 1;
+        if (!achievements[10]) {
+            achievements[10] = true;
+            achievements[numberOfAchievements]++;
+        }
     } else if (upgradeNum == 1 && βPupgradecost[1] <= βP) {
         βP -= βPupgradecost[1];
-        βPbounceSpeed += 0.1;
+        βPbounceSpeed += 0.25;
         βPupgradecost[1] = (βPupgradecost[1] * 3) - 1;
+        if (!achievements[11]) {
+            achievements[11] = true;
+            achievements[numberOfAchievements]++;
+        }
     } else if (upgradeNum == 2 && βPupgradecost[2] <= βP) {
         βP -= βPupgradecost[2];
         βPperβ += 1;
         βPupgradecost[2] = (βPupgradecost[2] * 3) - 1;
+        if (!achievements[12]) {
+            achievements[12] = true;
+            achievements[numberOfAchievements]++;
+        }
     }
     saveGame();
 }
@@ -421,16 +457,16 @@ function buyDavenBall() {
         βP -= davenBallCost;
         davenBalls.push(newDavenBall); 
         davenBallCost = Math.floor(davenBallCost * 2.5);
-        if (davenBalls.length >= 1 && !achievements[20]) {
-            achievements[20] = true;
+        if (davenBalls.length >= 1 && !achievements[24]) {
+            achievements[24] = true;
             achievements[numberOfAchievements]++;
         }
-        if (davenBalls.length >= 5 && !achievements[21]) {
-            achievements[21] = true;
+        if (davenBalls.length >= 5 && !achievements[25]) {
+            achievements[25] = true;
             achievements[numberOfAchievements]++;
         }
-        if (davenBalls.length >= 10 && !achievements[22]) {
-            achievements[22] = true;
+        if (davenBalls.length >= 10 && !achievements[26]) {
+            achievements[26] = true;
             achievements[numberOfAchievements]++;
         }
         updateUI();
@@ -442,8 +478,9 @@ function buyDavenBall() {
 function passiveβP() {
     let allRoyals = true;
     let allEmperors = true;
+    let βPadded = 0;
     for (let daven of davenBalls) {
-        βP += Math.floor(daven[1]);
+        βPadded += Math.floor(daven[1]);
         if (daven[0] !== "royal") {
             allRoyals = false;
         }
@@ -451,14 +488,31 @@ function passiveβP() {
             allEmperors = false;
         }
     }
-    if (allRoyals && davenBalls.length >= 10 && !achievements[26]) {
-        achievements[26] = true;
+    if (allRoyals && davenBalls.length >= 10 && !achievements[30]) {
+        achievements[30] = true;
         achievements[numberOfAchievements]++;
     }
-    if (allEmperors && davenBalls.length >= 10 && !achievements[28]) {
-        achievements[28] = true;
+    if (allEmperors && davenBalls.length >= 10 && !achievements[32]) {
+        achievements[32] = true;
         achievements[numberOfAchievements]++;
     }
+    if (βPadded >= 1000 && !achievements[33]) {
+        achievements[33] = true;
+        achievements[numberOfAchievements]++;
+    }
+    if (βPadded >= 1000000 && !achievements[34]) {
+        achievements[34] = true;
+        achievements[numberOfAchievements]++;
+    }
+    if (βPadded >= 100000000 && !achievements[35]) {
+        achievements[35] = true;
+        achievements[numberOfAchievements]++;
+    }
+    if (βPadded >= 10000000000 && !achievements[36]) {
+        achievements[36] = true;
+        achievements[numberOfAchievements]++;
+    }
+    βP += βPadded;
     updateUI();
     saveGame();
 }
@@ -508,20 +562,20 @@ function upgradeDavenRank() {
         βP -= upgradeCost;
         daven[0] = newRank;
         daven[1] = daven[1] * multipler;
-        if (newRank == "gold" && !achievements[23]) {
-            achievements[23] = true;
-            achievements[numberOfAchievements]++;
-        }
-        if (newRank == "shiny" && !achievements[24]) {
-            achievements[24] = true;
-            achievements[numberOfAchievements]++;
-        }
-        if (newRank == "royal" && !achievements[25]) {
-            achievements[25] = true;
-            achievements[numberOfAchievements]++;
-        }
-        if (newRank == "emperor" && !achievements[27]) {
+        if (newRank == "gold" && !achievements[27]) {
             achievements[27] = true;
+            achievements[numberOfAchievements]++;
+        }
+        if (newRank == "shiny" && !achievements[28]) {
+            achievements[28] = true;
+            achievements[numberOfAchievements]++;
+        }
+        if (newRank == "royal" && !achievements[29]) {
+            achievements[29] = true;
+            achievements[numberOfAchievements]++;
+        }
+        if (newRank == "emperor" && !achievements[31]) {
+            achievements[31] = true;
             achievements[numberOfAchievements]++;
         }
         updateUI();
@@ -548,19 +602,40 @@ function renderDavenBalls() {
 }
 
 function updateAchievements() {
-    let unlockedCount = 0;
+    let playerIndex = 0;
+    let unlockedAchievementsCount = 0;
     for (let i = 0; i < numberOfAchievements; i++) {
         const el = document.getElementById(`achievement${i + 1}`);
         if (el && achievements[i]) {
             el.innerText = "✓";
         }
         if (achievements[i]) {
-            unlockedCount++;
+            unlockedAchievementsCount++;
+            playerIndex += 0.1;
         }
     }
-    const doneEl = document.getElementById("achievementsDone");
-    if (doneEl) {
-        doneEl.innerText = unlockedCount;
+    const doneAchievementsEl = document.getElementById("achievementsDone");
+    if (doneAchievementsEl) {
+        doneAchievementsEl.innerText = unlockedAchievementsCount;
+    }
+    let unlockedSecretsCount = 0;
+    for (let i = 0; i < numberOfSecrets; i++) {
+        const el = document.getElementById(`secret${i + 1}`);
+        if (el && secrets[i]) {
+            el.innerText = "✓";
+        }
+        if (secrets[i]) {
+            unlockedSecretsCount++;
+            playerIndex += 0.3;
+        }
+    }
+    const doneSecretsEl = document.getElementById("secretsDone");
+    if (doneSecretsEl) {
+        doneSecretsEl.innerText = unlockedSecretsCount;
+    }
+    const playerIndexEl = document.getElementById("playerIndex");
+    if (playerIndexEl) {
+        playerIndexEl.innerText = playerIndex;
     }
     updateUI();
 }
@@ -583,7 +658,9 @@ function resetProgress() {
     brokenBouncfinity = false;
     davenBalls = [];
     davenBallCost = 100;
-    achievements = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, 0];
+    achievements = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, 0];
+    timePlayed = [0, 0, 0, 0];
+    secrets = [false, false, false, false, false, false, false, false];
 }
 
 function updateTimePlayed() {
@@ -599,6 +676,34 @@ function updateTimePlayed() {
     if (timePlayed[1] >= 24) {
         timePlayed[1] -= 24;
         timePlayed[0]++;
+    }
+    if (timePlayed[2] >= 10 && secrets[1] == false) {
+        secrets[1] = true;
+        secrets[numberOfSecrets]++;
+    }
+    if (timePlayed[2] >= 30 && secrets[2] == false) {
+        secrets[2] = true;
+        secrets[numberOfSecrets]++;
+    }
+    if (timePlayed[1] >= 1 && secrets[3] == false) {
+        secrets[3] = true;
+        secrets[numberOfSecrets]++;
+    }
+    if (timePlayed[1] >= 3  && secrets[4] == false) {
+        secrets[4] = true;
+        secrets[numberOfSecrets]++;
+    }
+    if (timePlayed[1] >= 6  && secrets[5] == false) {
+        secrets[5] = true;
+        secrets[numberOfSecrets]++;
+    }
+    if (timePlayed[1] >= 12  && secrets[6] == false) {
+        secrets[6] = true;
+        secrets[numberOfSecrets]++;
+    }
+    if (timePlayed[0] >= 1  && secrets[7] == false) {
+        secrets[7] = true;
+        secrets[numberOfSecrets]++;
     }
     document.getElementById("daysPlayed").innerText = timePlayed[0];
     document.getElementById("hoursPlayed").innerText = timePlayed[1];
