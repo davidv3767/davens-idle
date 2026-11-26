@@ -677,27 +677,27 @@ function updateTimePlayed() {
         timePlayed[1] -= 24;
         timePlayed[0]++;
     }
-    if (timePlayed[2] >= 10 && secrets[1] == false) {
+    if ((timePlayed[2] >= 10 || timePlayed[1] > 0 || timePlayed[0] > 0) && secrets[1] == false) {
         secrets[1] = true;
         secrets[numberOfSecrets]++;
     }
-    if (timePlayed[2] >= 30 && secrets[2] == false) {
+    if ((timePlayed[2] >= 30 || timePlayed[1] > 0 || timePlayed[0] > 0) && secrets[2] == false) {
         secrets[2] = true;
         secrets[numberOfSecrets]++;
     }
-    if (timePlayed[1] >= 1 && secrets[3] == false) {
+    if ((timePlayed[1] >= 1 || timePlayed[0] > 0) && secrets[3] == false) {
         secrets[3] = true;
         secrets[numberOfSecrets]++;
     }
-    if (timePlayed[1] >= 3  && secrets[4] == false) {
+    if ((timePlayed[1] >= 3 || timePlayed[0] > 0)  && secrets[4] == false) {
         secrets[4] = true;
         secrets[numberOfSecrets]++;
     }
-    if (timePlayed[1] >= 6  && secrets[5] == false) {
+    if ((timePlayed[1] >= 6 || timePlayed[0] > 0)  && secrets[5] == false) {
         secrets[5] = true;
         secrets[numberOfSecrets]++;
     }
-    if (timePlayed[1] >= 12  && secrets[6] == false) {
+    if ((timePlayed[1] >= 12 || timePlayed[0] > 0)  && secrets[6] == false) {
         secrets[6] = true;
         secrets[numberOfSecrets]++;
     }
